@@ -2,12 +2,23 @@ import { useState, useEffect } from "react";
 import TodoInput from "./components/TodoInput";
 import TodoList from "./components/TodoList";
 import TodoListFooter from "./components/TodoListFooter";
+import ToggleTheme from "./components/ToggleTheme";
 
 export default function App() {
   const [todos, setTodos] = useState([]);
   const [inputTodo, setInputTodo] = useState("");
   const [filter, setFilter] = useState("All");
+  const [theme, setTheme] = useState("dark-theme");
 
+  const toggleThemeHandler = () => {
+    if(theme === "light-theme") {
+      setTheme("dark-theme");
+    } else {
+      setTheme("light-theme");
+    }
+  }
+
+  // to show todo list from local storage
   const showTodoList = () => {
     const todoList = localStorage.getItem("todoList");
     if (todoList) {
@@ -15,9 +26,11 @@ export default function App() {
     }
   };
 
+  // to set theme
   useEffect(() => {
     showTodoList();
-  }, []);
+    document.body.className = theme;
+  }, [theme]);
 
   // const addTaskBtnHandler = (e) => {
 
@@ -112,7 +125,13 @@ export default function App() {
 
   return (
     <div className="App">
+
+      <ToggleTheme
+        theme={theme}
+        toggleThemeHandler={toggleThemeHandler}
+      />
       <h1 className="heading">Todo App</h1>
+
       <TodoInput
         setInputTodo={setInputTodo}
         inputTodo={inputTodo}
